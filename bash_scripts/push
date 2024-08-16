@@ -1,0 +1,14 @@
+if [[ "`git rev-parse --abbrev-ref HEAD`" == "dev" || "`git rev-parse --abbrev-ref HEAD`" == "master" ]] 
+then
+    echo -e "\e[0m\e[31mBe careful your pushing to master or dev!!! are you sure you want to push any way? (yes/no) \e[0m"
+    read
+    if [[ $REPLY == "yes" ]]
+    then
+        git push origin `git rev-parse --abbrev-ref HEAD`
+    else
+        echo Good choice!
+    fi
+else
+    git push origin `git rev-parse --abbrev-ref HEAD`
+fi
+

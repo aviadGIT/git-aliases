@@ -1,0 +1,69 @@
+BASHRC=~/.bashrc
+BASH_ALIASES=~/.bash_aliases
+BASH_PROFILE=~/.bash_profile
+BASH_SCRIPTS=~/bash_scripts
+
+echo "What is your path to the repositories directory?"
+read
+repositoriesDirPath=$REPLY
+
+cd $repositoriesDirPath/git-aliases
+git pull
+
+if [ ! -f $BASHRC ]; then
+    echo "copying .bashrc to user dir"
+    cp $repositoriesDirPath/.bashrc ~/.bashrc
+
+    echo "What is your name?"
+    read
+    sed -i '1s/^/NAME='$REPLY' /' ~/.bashrc
+
+else 
+ echo "Do you want to update and overwrite bashrc? (yes/no)"
+    read
+    if [[ $REPLY == "yes" ]]; then
+        rm -f ~/.bashrc
+        cp $repositoriesDirPath/.bashrc ~/.bashrc
+        
+        echo "What is your name?"
+        read
+        sed -i '1s/^/NAME='$REPLY' /' ~/.bashrc
+    fi
+fi
+
+if [ ! -f $BASH_ALIASES ]; then
+    echo "copying .bash_aliases to user dir"
+    cp $repositoriesDirPath/.bash_aliases ~/.bash_aliases
+
+    
+    sed -i '1s/^/repositoriesDir='$REPLY' /' ~/.bash_aliases
+else 
+echo "Do you want to update and overwrite bash aliases? (yes/no)"
+    read
+    if [[ $REPLY == "yes" ]]; then
+        echo "What is your repositories directory name?"
+        read
+
+        rm -f ~/.bash_aliases
+        cp $repositoriesDirPath/.bash_aliases ~/.bash_aliases
+        sed -i '1s/^/repositoriesDirPath='$$repositoriesDirPath' /' ~/.bash_aliases
+    fi
+fi
+if [ ! -f $BASH_PROFILE ]; then
+    echo "copying .bash_profile to user dir"
+    cp $repositoriesDirPath/.bash_profile ~/.bash_profile
+fi
+if [ ! -d $BASH_SCRIPTS ]; then
+    echo "copying bash_scripts to user dir"
+    cp -r $repositoriesDirPath/bash_scripts ~/bash_scripts
+else
+    echo "Do you want to update and overwrite bash scripts? (yes/no)"
+    read
+    if [[ $REPLY == "yes" ]]; then
+        rm -fr ~/bash_scripts
+        cp -r $repositoriesDirPath/bash_scripts ~/bash_scripts
+    fi
+fi
+
+bash
+
